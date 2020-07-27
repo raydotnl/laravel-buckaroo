@@ -44,5 +44,15 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Raydotnl\\LaravelBuckaroo\\Providers\\LaravelBuckarooServiceProvider"
+            ],
+            "aliases": {
+                "Buckaroo": "Raydotnl\\LaravelBuckaroo\\LaravelBuckarooFacade"
+            }
+        }
+    }
 }
