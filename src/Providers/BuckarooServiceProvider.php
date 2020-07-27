@@ -5,6 +5,7 @@ namespace Raydotnl\LaravelBuckaroo\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Raydotnl\LaravelBuckaroo\Buckaroo;
+use Raydotnl\LaravelBuckaroo\BuckarooTransaction;
 
 class BuckarooServiceProvider extends ServiceProvider
 {
@@ -23,5 +24,10 @@ class BuckarooServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->alias(Buckaroo::class, 'buckaroo');
+        $this->app->singleton(BuckarooTransaction::class,
+            function () {
+                return new BuckarooTransaction();
+            }
+        );
     }
 }

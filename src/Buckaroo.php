@@ -2,16 +2,40 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use URL;
+
 class Buckaroo
 {
+    /** @var bool */
+    private $debug = false;
+
+    /** @var null|string  */
+    private $nonce = null;
+
+    /** @var null|Carbon  */
+    private $timeStamp = null;
+
     public function __construct()
     {
     }
 
-    public function __call($name, $arguments)
+    /**
+     * @param bool $debug
+     */
+    public function setDebug(bool $debug): void
     {
+        $this->debug = $debug;
     }
 
+    private function debug($key, $value)
+    {
+        if ($this->debug) {
+            dump($key, $value, '===============================');
+        }
+    }
 
     /**
      * Generate the authorization header
@@ -23,24 +47,76 @@ class Buckaroo
      * @param $requestContentBase64String
      * @return string
      */
-    private function getAuthorizationHeader($requestHttpMethod, $requestUri, $requestTimestamp, $nonce, $requestContentBase64String): string
+    private function getAuthorizationHeader($requestHttpMethod, $requestUri, $requestData): string
     {
-        $websiteKey = config('laravel_buckaroo.buckaroo_website_key');
-        $secretKey = config('laravel_buckaroo.buckaroo_secret_key');
+        $websiteKey = config('buckaroo.buckaroo_website_key');
+        $secretKey = config('buckaroo.buckaroo_secret_key');
+        $timestamp = $this->getTimestamp();
+        $nonce = $this->getNonce();
 
         $header = [];
         $header[] = 'hmac '.$websiteKey;
 
-        $data = $websiteKey . $requestHttpMethod . $requestUri . $requestTimestamp . $nonce . $requestContentBase64String;
-        $header[] = hash_hmac('sha256', $data, $secretKey);
+        $requestContentBase64String = base64_encode(md5($requestData, true));
 
-        $header[] = uniqid('', true);
-        $header[] = $requestTimestamp;
+        $uri = Str::substr($requestUri, 8);
+        $uri = strtolower(urlencode($uri));
+
+        $data = $websiteKey . $requestHttpMethod . $uri . $timestamp . $nonce . $requestContentBase64String;
+
+        $header[] = base64_encode(hash_hmac('sha256', $data, $secretKey, true));
+        $header[] = $nonce;
+        $header[] = $timestamp;
 
         return implode(':', $header);
     }
 
-    private function request($methods, $action)
+    /**
+     * @return string
+     */
+    private function getNonce()
     {
+        return Str::random(16);
+    }
+
+    /**
+     * @return int
+     */
+    private function getTimestamp()
+    {
+        if ($this->debug) {
+            return 1595847908;
+        }
+        return now()->timestamp;
+    }
+
+    protected function request($requestMethod, $action, $data = null)
+    {
+        if ($data) {
+            $data = json_encode($data);
+        }
+
+        $uri = URL::format(config('buckaroo.buckaroo_url'), $action);
+
+        $this->debug('Authorization', $this->getAuthorizationHeader($requestMethod, $uri, $data));
+
+        $http = Http::withHeaders([
+            'Authorization' => $this->getAuthorizationHeader($requestMethod, $uri, $data),
+            'Channel' => 'web'
+        ]);
+
+        if ($requestMethod === 'POST') {
+            $response = $http->withBody($data, 'application/json')->post($uri);
+        } elseif ($requestMethod === 'GET') {
+            $response = $http->get($uri, $data);
+        } else {
+            throw new \Exception('invalid requestMethod '.$requestMethod.' (valid methods are POST, GET)');
+        }
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            throw new \Exception('Something went wrong '.$response->status().' '.$response->body());
+        }
     }
 }

@@ -51,7 +51,7 @@
                 "Raydotnl\\LaravelBuckaroo\\Providers\\BuckarooServiceProvider"
             ],
             "aliases": {
-                "Buckaroo": "Raydotnl\\LaravelBuckaroo\\BuckarooFacade"
+                "Buckaroo": "Raydotnl\\LaravelBuckaroo\\Buckaroo"
             }
         }
     }
