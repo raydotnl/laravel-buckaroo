@@ -30,13 +30,6 @@ class Buckaroo
         $this->debug = $debug;
     }
 
-    private function debug($key, $value)
-    {
-        if ($this->debug) {
-            dump($key, $value, '===============================');
-        }
-    }
-
     /**
      * Generate the authorization header
      *
@@ -84,10 +77,6 @@ class Buckaroo
      */
     private function getTimestamp()
     {
-        if ($this->debug) {
-            return 1595847908;
-        }
-
         return now()->timestamp;
     }
 
@@ -98,8 +87,6 @@ class Buckaroo
         }
 
         $uri = URL::format(config('buckaroo.buckaroo_url'), $action);
-
-        $this->debug('Authorization', $this->getAuthorizationHeader($requestMethod, $uri, $data));
 
         $http = Http::withHeaders([
             'Authorization' => $this->getAuthorizationHeader($requestMethod, $uri, $data),
