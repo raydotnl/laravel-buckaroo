@@ -86,7 +86,7 @@ class Buckaroo
             $data = json_encode($data);
         }
 
-        $uri = URL::format(config('buckaroo.buckaroo_url'), $action);
+        $uri = URL::format(config('buckaroo.buckaroo_url'), '/json/'.$action);
 
         $http = Http::withHeaders([
             'Authorization' => $this->getAuthorizationHeader($requestMethod, $uri, $data),
