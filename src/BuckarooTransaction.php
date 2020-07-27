@@ -3,6 +3,7 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 
 class BuckarooTransaction extends Buckaroo
@@ -28,6 +29,12 @@ class BuckarooTransaction extends Buckaroo
 
     private $errors = [];
 
+    /**
+     * @param $firstname
+     * @param $lastname
+     * @param $email
+     * @param int $gender
+     */
     public function setCustomer($firstname, $lastname, $email, $gender = 0)
     {
         $this->customer['firstname'] = $firstname;
@@ -76,6 +83,9 @@ class BuckarooTransaction extends Buckaroo
         $this->language = $language;
     }
 
+    /**
+     * @return array
+     */
     private function getPaymentMethods()
     {
         $paymentMethods = [];
@@ -88,6 +98,10 @@ class BuckarooTransaction extends Buckaroo
         return $paymentMethods;
     }
 
+    /**
+     * @param $serviceList
+     * @return array
+     */
     private function getTransactionData($serviceList)
     {
         $data = [
@@ -113,6 +127,10 @@ class BuckarooTransaction extends Buckaroo
         return $data;
     }
 
+    /**
+     * @param $serviceList
+     * @throws \Exception
+     */
     public function createTransaction($serviceList)
     {
         if ($transaction = $this->request('POST', 'Transaction', $this->getTransactionData($serviceList))) {
@@ -124,6 +142,9 @@ class BuckarooTransaction extends Buckaroo
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function createPayPerMailTransaction()
     {
         return $this->createTransaction([
@@ -158,21 +179,59 @@ class BuckarooTransaction extends Buckaroo
         ]);
     }
 
+    /**
+     * @return bool
+     */
     public function successfull()
     {
         return empty($this->attributes['RequestErrors']);
     }
 
+    /**
+     * @return BuckarooTransaction
+     */
     public function new()
     {
         return new self();
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    /**
+     * @param $name
+     * @return mixed|null
+     */
     public function __get($name)
     {
         if (! empty($this->attributes[$name])) {
             return $this->attributes[$name];
         } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param $key
+     * @return mixed|null
+     */
+    public function getParameter($key)
+    {
+        if (!empty($this->attributes['Services'][0]['Parameters'])) {
+            $parameters = new Collection($this->attributes['Services'][0]['Parameters']);
+            if ($parameter = $parameters->first(
+                function ($row) use ($key) {
+                    return $row['Name'] === $key;
+                }
+            )) {
+                return $parameter['Value'];
+            }
             return null;
         }
     }
