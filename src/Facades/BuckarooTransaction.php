@@ -3,7 +3,6 @@
 
 namespace Raydotnl\LaravelBuckaroo\Facades;
 
-
 use Illuminate\Support\Facades\Facade;
 
 class BuckarooTransaction extends Facade

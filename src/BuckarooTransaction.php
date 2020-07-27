@@ -3,7 +3,6 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
-
 use Illuminate\Support\Facades\URL;
 
 class BuckarooTransaction extends Buckaroo
@@ -22,7 +21,7 @@ class BuckarooTransaction extends Buckaroo
         'firstname' => '',
         'lastname' => '',
         'email' => '',
-        'gender' => 0
+        'gender' => 0,
     ];
 
     private $attributes = null;
@@ -44,7 +43,7 @@ class BuckarooTransaction extends Buckaroo
     }
 
     /**
-     * @param integer $amountDebit
+     * @param int $amountDebit
      */
     public function setAmountDebit($amountDebit): void
     {
@@ -52,7 +51,7 @@ class BuckarooTransaction extends Buckaroo
     }
 
     /**
-     * @param integer $amountCredit
+     * @param int $amountCredit
      */
     public function setAmountCredit($amountCredit): void
     {
@@ -92,17 +91,17 @@ class BuckarooTransaction extends Buckaroo
         $data = [
             'Currency' => $this->currency,
             'Invoice' => $this->invoiceNumber,
-            'PushURL'=> URL::format(config('app.url'), config('buckaroo.buckaroo_push_url')).'?lang='.$this->language,
-            'ReturnURL'=> URL::format(config('app.url'), config('buckaroo.buckaroo_return_url')).'?lang='.$this->language,
-            'ReturnURLCancel'=> URL::format(config('app.url'), config('buckaroo.buckaroo_return_cancel_url')).'?lang='.$this->language,
-            'ReturnURLError'=> URL::format(config('app.url'), config('buckaroo.buckaroo_return_error_url')).'?lang='.$this->language,
-            'ReturnURLReject'=> URL::format(config('app.url'), config('buckaroo.buckaroo_return_reject_url')).'?lang='.$this->language,
-            'Services'=>[
-                'ServiceList'=>[
+            'PushURL' => URL::format(config('app.url'), config('buckaroo.buckaroo_push_url')).'?lang='.$this->language,
+            'ReturnURL' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_url')).'?lang='.$this->language,
+            'ReturnURLCancel' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_cancel_url')).'?lang='.$this->language,
+            'ReturnURLError' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_error_url')).'?lang='.$this->language,
+            'ReturnURLReject' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_reject_url')).'?lang='.$this->language,
+            'Services' => [
+                'ServiceList' => [
                     [
-                        'Name'=>'payperemail',
-                        'Action'=>'PaymentInvitation',
-                        'Parameters'=>[
+                        'Name' => 'payperemail',
+                        'Action' => 'PaymentInvitation',
+                        'Parameters' => [
                             [
                                 'Name' => 'CustomerGender',
                                 'Value' => $this->customer['gender'],
@@ -117,11 +116,11 @@ class BuckarooTransaction extends Buckaroo
                             ],
                             [
                                 'Name' => 'CustomerEmail',
-                                'Value' =>  $this->customer['email'],
+                                'Value' => $this->customer['email'],
                             ],
                             [
-                                'Name'=>'MerchantSendsEmail',
-                                'Value'=>true,
+                                'Name' => 'MerchantSendsEmail',
+                                'Value' => true,
                             ],
                             [
                                 'Name' => 'PaymentMethodsAllowed',
@@ -157,7 +156,7 @@ class BuckarooTransaction extends Buckaroo
 
     public function __get($name)
     {
-        if (!empty($this->attributes[$name])) {
+        if (! empty($this->attributes[$name])) {
             return $this->attributes[$name];
         } else {
             return null;
