@@ -4,9 +4,9 @@
 namespace Raydotnl\LaravelBuckaroo\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Raydotnl\LaravelBuckaroo\LaravelBuckaroo;
+use Raydotnl\LaravelBuckaroo\Buckaroo;
 
-class LaravelBuckarooServiceProvider extends ServiceProvider
+class BuckarooServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -16,12 +16,12 @@ class LaravelBuckarooServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/laravel-buckaroo.php' => config_path('laravel-buckaroo.php'),
+            __DIR__.'/../config/buckaroo.php' => config_path('buckaroo.php'),
         ]);
     }
 
     public function register()
     {
-        $this->app->alias(LaravelBuckaroo::class, 'laravel-buckaroo');
+        $this->app->alias(Buckaroo::class, 'buckaroo');
     }
 }

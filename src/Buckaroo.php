@@ -2,7 +2,7 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
-class LaravelBuckaroo
+class Buckaroo
 {
     public function __construct()
     {

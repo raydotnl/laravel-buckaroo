@@ -48,10 +48,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Raydotnl\\LaravelBuckaroo\\Providers\\LaravelBuckarooServiceProvider"
+                "Raydotnl\\LaravelBuckaroo\\Providers\\BuckarooServiceProvider"
             ],
             "aliases": {
-                "Buckaroo": "Raydotnl\\LaravelBuckaroo\\LaravelBuckarooFacade"
+                "Buckaroo": "Raydotnl\\LaravelBuckaroo\\BuckarooFacade"
             }
         }
     }
