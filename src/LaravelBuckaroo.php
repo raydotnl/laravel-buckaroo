@@ -42,6 +42,5 @@ class LaravelBuckaroo
 
     private function request($methods, $action)
     {
-
     }
 }

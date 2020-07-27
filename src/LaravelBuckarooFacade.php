@@ -3,7 +3,6 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
-
 use Illuminate\Support\Facades\Facade;
 
 class LaravelBuckarooFacade extends Facade
