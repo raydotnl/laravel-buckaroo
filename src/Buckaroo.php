@@ -12,10 +12,10 @@ class Buckaroo
     /** @var bool */
     private $debug = false;
 
-    /** @var null|string  */
+    /** @var null|string */
     private $nonce = null;
 
-    /** @var null|Carbon  */
+    /** @var null|Carbon */
     private $timeStamp = null;
 
     public function __construct()
@@ -87,6 +87,7 @@ class Buckaroo
         if ($this->debug) {
             return 1595847908;
         }
+
         return now()->timestamp;
     }
 
@@ -102,7 +103,7 @@ class Buckaroo
 
         $http = Http::withHeaders([
             'Authorization' => $this->getAuthorizationHeader($requestMethod, $uri, $data),
-            'Channel' => 'web'
+            'Channel' => 'web',
         ]);
 
         if ($requestMethod === 'POST') {

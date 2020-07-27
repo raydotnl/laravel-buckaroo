@@ -24,7 +24,8 @@ class BuckarooServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->alias(Buckaroo::class, 'buckaroo');
-        $this->app->singleton(BuckarooTransaction::class,
+        $this->app->singleton(
+            BuckarooTransaction::class,
             function () {
                 return new BuckarooTransaction();
             }
