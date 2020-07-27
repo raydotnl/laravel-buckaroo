@@ -223,7 +223,7 @@ class BuckarooTransaction extends Buckaroo
      */
     public function getParameter($key)
     {
-        if (!empty($this->attributes['Services'][0]['Parameters'])) {
+        if (! empty($this->attributes['Services'][0]['Parameters'])) {
             $parameters = new Collection($this->attributes['Services'][0]['Parameters']);
             if ($parameter = $parameters->first(
                 function ($row) use ($key) {
@@ -232,6 +232,7 @@ class BuckarooTransaction extends Buckaroo
             )) {
                 return $parameter['Value'];
             }
+
             return null;
         }
     }
