@@ -87,7 +87,7 @@ class BuckarooTransaction extends Buckaroo
         return $paymentMethods;
     }
 
-    private function getTransactionData()
+    private function getTransactionData($serviceList)
     {
         $data = [
             'Currency' => $this->currency,
@@ -98,38 +98,7 @@ class BuckarooTransaction extends Buckaroo
             'ReturnURLError'=> URL::format(config('app.url'), config('buckaroo.buckaroo_return_error_url')).'?lang='.$this->language,
             'ReturnURLReject'=> URL::format(config('app.url'), config('buckaroo.buckaroo_return_reject_url')).'?lang='.$this->language,
             'Services'=>[
-                'ServiceList'=>[
-                    [
-                        'Name'=>'payperemail',
-                        'Action'=>'PaymentInvitation',
-                        'Parameters'=>[
-                            [
-                                'Name' => 'CustomerGender',
-                                'Value' => $this->customer['gender'],
-                            ],
-                            [
-                                'Name' => 'CustomerFirstName',
-                                'Value' => $this->customer['firstname'],
-                            ],
-                            [
-                                'Name' => 'CustomerLastName',
-                                'Value' => $this->customer['lastname'],
-                            ],
-                            [
-                                'Name' => 'CustomerEmail',
-                                'Value' =>  $this->customer['email'],
-                            ],
-                            [
-                                'Name'=>'MerchantSendsEmail',
-                                'Value'=>true,
-                            ],
-                            [
-                                'Name' => 'PaymentMethodsAllowed',
-                                'Value' => implode(',', $this->getPaymentMethods()),
-                            ],
-                        ],
-                    ],
-                ],
+                'ServiceList'=> [$serviceList],
             ],
         ];
 
@@ -143,11 +112,45 @@ class BuckarooTransaction extends Buckaroo
         return $data;
     }
 
-    public function createTransaction()
+    public function createTransaction($serviceList)
     {
-        if ($transaction = $this->request('POST', 'Transaction', $this->getTransactionData())) {
+        if ($transaction = $this->request('POST', 'Transaction', $this->getTransactionData($serviceList))) {
             $this->attributes = $transaction;
         }
+    }
+
+    public function createPayPerMailTransaction()
+    {
+        return $this->createTransaction([
+            'Name'=>'payperemail',
+            'Action'=>'PaymentInvitation',
+            'Parameters'=>[
+                [
+                    'Name' => 'CustomerGender',
+                    'Value' => $this->customer['gender'],
+                ],
+                [
+                    'Name' => 'CustomerFirstName',
+                    'Value' => $this->customer['firstname'],
+                ],
+                [
+                    'Name' => 'CustomerLastName',
+                    'Value' => $this->customer['lastname'],
+                ],
+                [
+                    'Name' => 'CustomerEmail',
+                    'Value' =>  $this->customer['email'],
+                ],
+                [
+                    'Name'=>'MerchantSendsEmail',
+                    'Value'=>true,
+                ],
+                [
+                    'Name' => 'PaymentMethodsAllowed',
+                    'Value' => implode(',', $this->getPaymentMethods()),
+                ],
+            ],
+        ]);
     }
 
     public function new()
