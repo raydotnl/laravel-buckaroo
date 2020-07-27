@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Skeleton\Tests;
+namespace Raydotnl\LaravelBuckaroo\Tests;
 
 use PHPUnit\Framework\TestCase;
 

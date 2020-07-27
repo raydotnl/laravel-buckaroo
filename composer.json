@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_name/:package_name",
-    "description": ":package_description",
+    "name": "raydotnl/laravel-buckaroo",
+    "description": "Laravel Buckaroo package",
     "keywords": [
-        ":vendor_name",
-        ":package_name"
+        "raydotnl",
+        "laravel-buckaroo"
     ],
-    "homepage": "https://github.com/spatie/:package_name",
+    "homepage": "https://github.com/raydotnl/laravel-buckaroo",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": ":author_email",
-            "homepage": "https://spatie.be",
+            "name": "Sjoerd Rutten",
+            "email": "sjoerd@ray.nl",
+            "homepage": "https://ray.nl",
             "role": "Developer"
         }
     ],
@@ -20,17 +20,18 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",
+        "laravel/framework": "^7.21",
         "phpunit/phpunit": "^9.0",
         "vimeo/psalm": "^3.11"
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Skeleton\\": "src"
+            "Raydotnl\\LaravelBuckaroo\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Skeleton\\Tests\\": "tests"
+            "Raydotnl\\LaravelBuckaroo\\Tests\\": "tests"
         }
     },
     "scripts": {
