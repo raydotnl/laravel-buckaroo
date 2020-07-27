@@ -4,7 +4,6 @@
 namespace Raydotnl\LaravelBuckaroo;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\URL;
 
 class BuckarooTransaction extends Buckaroo
 {
@@ -214,6 +213,7 @@ class BuckarooTransaction extends Buckaroo
             if (! empty($this->attributes['Status']['Code']['Description'])) {
                 return $this->attributes['Status']['Code']['Description'];
             }
+
             return null;
         } elseif (! empty($this->attributes[$name])) {
             return $this->attributes[$name];
