@@ -118,7 +118,7 @@ class BuckarooTransaction extends Buckaroo
         if ($transaction = $this->request('POST', 'Transaction', $this->getTransactionData($serviceList))) {
             $this->attributes = $transaction;
 
-            if (!$this->successfull()) {
+            if (! $this->successfull()) {
                 $this->errors = $this->attributes['RequestErrors'];
             }
         }
