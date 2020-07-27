@@ -107,11 +107,11 @@ class BuckarooTransaction extends Buckaroo
         $data = [
             'Currency' => $this->currency,
             'Invoice' => $this->invoiceNumber,
-            'PushURL' => URL::format(config('app.url'), config('buckaroo.buckaroo_push_url')).'?lang='.$this->language,
-            'ReturnURL' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_url')).'?lang='.$this->language,
-            'ReturnURLCancel' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_cancel_url')).'?lang='.$this->language,
-            'ReturnURLError' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_error_url')).'?lang='.$this->language,
-            'ReturnURLReject' => URL::format(config('app.url'), config('buckaroo.buckaroo_return_reject_url')).'?lang='.$this->language,
+            'PushURL' => config('buckaroo.buckaroo_push_url'),
+            'ReturnURL' => config('buckaroo.buckaroo_return_url'),
+            'ReturnURLCancel' => config('buckaroo.buckaroo_return_cancel_url'),
+            'ReturnURLError' => config('buckaroo.buckaroo_return_error_url'),
+            'ReturnURLReject' => config('buckaroo.buckaroo_return_reject_url'),
             'Services' => [
                 'ServiceList' => [$serviceList],
             ],
@@ -210,7 +210,12 @@ class BuckarooTransaction extends Buckaroo
      */
     public function __get($name)
     {
-        if (! empty($this->attributes[$name])) {
+        if ($name === 'status') {
+            if (! empty($this->attributes['Status']['Code']['Description'])) {
+                return $this->attributes['Status']['Code']['Description'];
+            }
+            return null;
+        } elseif (! empty($this->attributes[$name])) {
             return $this->attributes[$name];
         } else {
             return null;
