@@ -26,6 +26,8 @@ class BuckarooTransaction extends Buckaroo
 
     private $attributes = null;
 
+    private $errors = [];
+
     public function setCustomer($firstname, $lastname, $email, $gender = 0)
     {
         $this->customer['firstname'] = $firstname;
@@ -115,6 +117,10 @@ class BuckarooTransaction extends Buckaroo
     {
         if ($transaction = $this->request('POST', 'Transaction', $this->getTransactionData($serviceList))) {
             $this->attributes = $transaction;
+
+            if (!$this->successfull()) {
+                $this->errors = $this->attributes['RequestErrors'];
+            }
         }
     }
 
@@ -150,6 +156,11 @@ class BuckarooTransaction extends Buckaroo
                 ],
             ],
         ]);
+    }
+
+    public function successfull()
+    {
+        return empty($this->attributes['RequestErrors']);
     }
 
     public function new()
