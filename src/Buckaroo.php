@@ -50,7 +50,11 @@ class Buckaroo
         $header = [];
         $header[] = 'hmac '.$websiteKey;
 
-        $requestContentBase64String = base64_encode(md5($requestData, true));
+        if ($requestData) {
+            $requestContentBase64String = base64_encode(md5($requestData, true));
+        } else {
+            $requestContentBase64String = null;
+        }
 
         $uri = Str::substr($requestUri, 8);
         $uri = strtolower(urlencode($uri));

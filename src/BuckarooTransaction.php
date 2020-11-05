@@ -180,7 +180,7 @@ class BuckarooTransaction extends Buckaroo
 
     public function getTransactionInfo($transaction_id)
     {
-        if ($transaction = $this->request('GET', 'Transaction/'.$transaction_id)) {
+        if ($transaction = $this->request('GET', 'Transaction/Status/'.$transaction_id)) {
             $this->attributes = $transaction;
 
             return $transaction;
