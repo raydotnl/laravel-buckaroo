@@ -3,6 +3,7 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class BuckarooTransaction extends Buckaroo
@@ -23,6 +24,8 @@ class BuckarooTransaction extends Buckaroo
         'email' => '',
         'gender' => 0,
     ];
+
+    private $expirationDate = null;
 
     private $attributes = null;
 
@@ -80,6 +83,12 @@ class BuckarooTransaction extends Buckaroo
     public function setLanguage($language): void
     {
         $this->language = $language;
+    }
+
+    /** @params Carbon $date */
+    public function setExpirationDate(Carbon $date): void
+    {
+        $this->expirationDate = $date;
     }
 
     /**
@@ -173,6 +182,10 @@ class BuckarooTransaction extends Buckaroo
                 [
                     'Name' => 'PaymentMethodsAllowed',
                     'Value' => implode(',', $this->getPaymentMethods()),
+                ],
+                [
+                    'Name' => 'ExpirationDate',
+                    'Value' => $this->expirationDate ? $this->expirationDate->toDateString() : now()->addYear()->toDateString(),
                 ],
             ],
         ]);
