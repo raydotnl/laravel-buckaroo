@@ -100,7 +100,6 @@ class BuckarooTransaction extends Buckaroo
         $paymentMethods[] = 'ideal';
         $paymentMethods[] = 'mastercard';
         $paymentMethods[] = 'visa';
-        $paymentMethods[] = 'amex';
         $paymentMethods[] = 'maestro';
 
         return $paymentMethods;
