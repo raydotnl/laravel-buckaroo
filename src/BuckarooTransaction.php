@@ -3,6 +3,7 @@
 
 namespace Raydotnl\LaravelBuckaroo;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -30,6 +31,8 @@ class BuckarooTransaction extends Buckaroo
     private $attributes = null;
 
     private $errors = [];
+
+    private $paymentMethods = ['ideal', 'mastercard', 'visa', 'maestro',];
 
     /**
      * @param $firstname
@@ -91,18 +94,45 @@ class BuckarooTransaction extends Buckaroo
         $this->expirationDate = $date;
     }
 
+    public function noIdeal()
+    {
+        $this->removePaymentMethod('ideal');
+    }
+
+    public function noMastercard()
+    {
+        $this->removePaymentMethod('mastercard');
+    }
+
+    public function noVisa()
+    {
+        $this->removePaymentMethod('visa');
+    }
+
+    public function noMaestro()
+    {
+        $this->removePaymentMethod('maestro');
+    }
+
+    public function noCreditCards()
+    {
+        $this->noMastercard();
+        $this->noVisa();
+    }
+
+    public function removePaymentMethod($method)
+    {
+        $this->paymentMethods = Arr::where($this->paymentMethods, function ($value, $key) use ($method) {
+            return $value !== $method;
+        });
+    }
+
     /**
      * @return array
      */
     private function getPaymentMethods()
     {
-        $paymentMethods = [];
-        $paymentMethods[] = 'ideal';
-        $paymentMethods[] = 'mastercard';
-        $paymentMethods[] = 'visa';
-        $paymentMethods[] = 'maestro';
-
-        return $paymentMethods;
+        return $this->paymentMethods;
     }
 
     /**
