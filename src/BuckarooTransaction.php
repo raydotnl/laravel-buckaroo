@@ -118,6 +118,7 @@ class BuckarooTransaction extends Buckaroo
     {
         $this->noMastercard();
         $this->noVisa();
+        $this->noMaestro();
     }
 
     public function removePaymentMethod($method)
